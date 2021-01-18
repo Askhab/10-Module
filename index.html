@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Контейнер-обёртка -->
+    <div class="container">
+        <!-- Блок формы -->
+        <form>
+            <!-- Блок редактора текста и истории изменений -->
+            <div class="editor clear">
+                <!-- Текстовый блок -->
+                <div id="textNote">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, ipsa. Eligendi, voluptatum tempora.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, ipsa. Eligendi, voluptatum tempora.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, ipsa. Eligendi, voluptatum tempora.</p>
+                </div>
+                <!-- История изменений текста по дате и времени -->
+                <select id="textNoteHistory" size="3"></select>
+            </div>
+            <!-- Блок действий с текстом -->
+            <div class="action">
+                <!-- Кнопки взаимодействия с текстовым блоком -->
+                <button class="editBtn">Редактировать</button>
+                <button class="saveBtn" disabled>Сохранить</button>
+                <button class="cancelBtn" disabled>Отмена</button>
+            </div>
+        </form>
+    </div>
+    
+    <script src="scripts.js"></script>
+</body>
+</html>
