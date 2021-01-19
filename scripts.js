@@ -36,11 +36,6 @@ function saveTextChanges(event) {
 
 function cancelTextChanges(event) {
     edit.setAttribute('disabled', 'disabled');
-    text.textContent = localStorage.getItem();
 
     event.preventDefault();
-}
-
-function changeAttribute() {
-    edit.setAttribute('disabled');
 }
