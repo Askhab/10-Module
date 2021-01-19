@@ -14,24 +14,33 @@ cancel.addEventListener('click', cancelTextChanges);
 
 // Функции
 function editTextNote(event) {
-    text.setAttribute("contenteditable", "true");
-    save.removeAttribute("disabled");
-    cancel.removeAttribute("disabled");
+    text.setAttribute('contenteditable', 'true');
+    save.removeAttribute('disabled');
+    cancel.removeAttribute('disabled');
     
-    changeAttribute();
+    edit.removeEventListener('click', editTextNote);
+    edit.setAttribute('disabled', 'disabled');
+
     event.preventDefault();
 }
 
 function saveTextChanges(event) {
+    localStorage.setItem(commit, text.textContent);
+    text.removeAttribute('contenteditable');
+    edit.removeAttribute('disabled');
+    save.setAttribute('disabled', 'disabled');
+    cancel.setAttribute('disabled', 'disabled');
 
     event.preventDefault();
 }
 
 function cancelTextChanges(event) {
+    edit.setAttribute('disabled', 'disabled');
+    text.textContent = localStorage.getItem();
 
     event.preventDefault();
 }
 
 function changeAttribute() {
-    edit.setAttribute("disabled");
+    edit.setAttribute('disabled');
 }
