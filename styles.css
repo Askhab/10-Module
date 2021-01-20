@@ -7,7 +7,7 @@
 
 .container {
     margin: 100px auto;
-    max-width: 1000px;
+    max-width: 1200px;
     min-width: 600px;
 }
 
@@ -21,14 +21,14 @@ form {
 }
 
 #textNote {
-    width: 70%;
+    width: 68%;
     padding: 10px;
     float: left;
     margin-right: 20px;
     border: 1px solid #2a2a2a;
 }
 
-#textNotehistory {
+#textNoteHistory {
     width: 30%;
     float: right;
 }

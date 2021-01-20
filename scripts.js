@@ -1,9 +1,8 @@
 'use strict';
 
 let text = document.querySelector('#textNote'),
-    textChangeHistory = document.querySelector('.textNoteHistory'),
-    storageItems = [],
-    commit = new Date(),
+    textChangeHistory = document.querySelector('#textNoteHistory'),
+    storageArray = [],
     edit = document.querySelector('.editBtn'),
     save = document.querySelector('.saveBtn'),
     cancel = document.querySelector('.cancelBtn');
@@ -12,25 +11,25 @@ let text = document.querySelector('#textNote'),
 edit.addEventListener('click', editTextNote);
 save.addEventListener('click', saveTextChanges);
 cancel.addEventListener('click', cancelTextChanges);
+textChangeHistory.addEventListener('onpageload', );
 
 // Функции
 function editTextNote(event) {
     text.setAttribute('contenteditable', 'true');
+    edit.setAttribute('disabled', 'disabled');
     save.removeAttribute('disabled');
     cancel.removeAttribute('disabled');
-    
-    edit.setAttribute('disabled', 'disabled');
 
     event.preventDefault();
 }
 
 function saveTextChanges(event) {
-    const setOption = function() {
-        const option = document.createElement('option');
-        option.textContent = commit;
-        textChangeHistory.append(option);
-    };
-    setOption();
+    const option = document.createElement('option');
+    const commit = new Date();
+
+    option.textContent = commit;
+    textChangeHistory.append(option);
+    localStorage.setItem(commit, text.textContent);
 
     text.removeAttribute('contenteditable');
     edit.removeAttribute('disabled');
@@ -45,6 +44,8 @@ function cancelTextChanges(event) {
 
     event.preventDefault();
 }
+
+
 
 
 // 1 - при первой загрузке страницы в блоке с текстом отображается текст по умолчанию (любой);
