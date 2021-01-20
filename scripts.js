@@ -8,10 +8,10 @@ let text = document.querySelector('#textNote'),
     cancel = document.querySelector('.cancelBtn');
 
 // Обработчики событий
+document.addEventListener('DOMContentLoaded', getStorageHistory);
 edit.addEventListener('click', editTextNote);
 save.addEventListener('click', saveTextChanges);
 cancel.addEventListener('click', cancelTextChanges);
-textChangeHistory.addEventListener('onpageload', );
 
 // Функции
 function editTextNote(event) {
@@ -27,9 +27,10 @@ function saveTextChanges(event) {
     const option = document.createElement('option');
     const commit = new Date();
 
-    option.textContent = commit;
-    textChangeHistory.append(option);
     localStorage.setItem(commit, text.textContent);
+    option.textContent = commit;
+    textChangeHistory.prepend(option);
+    
 
     text.removeAttribute('contenteditable');
     edit.removeAttribute('disabled');
@@ -45,7 +46,16 @@ function cancelTextChanges(event) {
     event.preventDefault();
 }
 
+function getStorageHistory() {
+    let key;
+    let option = document.createElement('option');
 
+    for(let i = 0; i < localStorage.length; i++) {
+        key = localStorage.key(i);
+        option.textContent = key;
+        textChangeHistory.prepend(option);
+    }
+}
 
 
 // 1 - при первой загрузке страницы в блоке с текстом отображается текст по умолчанию (любой);
