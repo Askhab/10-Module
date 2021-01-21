@@ -15,7 +15,7 @@ cancel.addEventListener('click', cancelTextChanges);
 
 // Функции
 function editTextNote(event) {
-    text.contenteditable = true;
+    text.contentEditable = true;
     edit.disabled = true;
     save.disabled = false;
     cancel.disabled = false;
@@ -32,7 +32,7 @@ function saveTextChanges(event) {
     textChangeHistory.prepend(option);
     
 
-    text.contenteditable = false;
+    text.contentEditable = false;
     edit.disabled = false;
     save.disabled = true;
     cancel.disabled = true;
@@ -49,11 +49,13 @@ function cancelTextChanges(event) {
 function getStorageHistory(event) {
     let key;
     let option = document.createElement('option');
-
-    for(let i = 0; i < localStorage.length; i++) {
-        key = localStorage.key(i);
-        option.textContent = key;
-        textChangeHistory.prepend(option);
+    
+    if (localStorage.length >= 0) {
+        for(let i = 0; i < localStorage.length; i++) {
+            key = localStorage.key(i);
+            option.textContent = key;
+            textChangeHistory.prepend(option);
+        }
     }
 
     event.preventDefault();
