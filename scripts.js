@@ -15,10 +15,10 @@ cancel.addEventListener('click', cancelTextChanges);
 
 // Функции
 function editTextNote(event) {
-    text.setAttribute('contenteditable', 'true');
-    edit.setAttribute('disabled', 'disabled');
-    save.removeAttribute('disabled');
-    cancel.removeAttribute('disabled');
+    text.contenteditable = true;
+    edit.disabled = true;
+    save.disabled = false;
+    cancel.disabled = false;
 
     event.preventDefault();
 }
@@ -32,16 +32,16 @@ function saveTextChanges(event) {
     textChangeHistory.prepend(option);
     
 
-    text.removeAttribute('contenteditable');
-    edit.removeAttribute('disabled');
-    save.setAttribute('disabled', 'disabled');
-    cancel.setAttribute('disabled', 'disabled');
+    text.contenteditable = false;
+    edit.disabled = false;
+    save.disabled = true;
+    cancel.disabled = true;
 
     event.preventDefault();
 }
 
 function cancelTextChanges(event) {
-    edit.setAttribute('disabled', 'disabled');
+    edit.disabled = true;
 
     event.preventDefault();
 }
