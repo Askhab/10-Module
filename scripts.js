@@ -50,7 +50,7 @@ function getStorageHistory(event) {
     let key;
     let option = document.createElement('option');
     
-    if (localStorage.length >= 0) {
+    if (localStorage.length > 0) {
         for(let i = 0; i < localStorage.length; i++) {
             key = localStorage.key(i);
             option.textContent = key;
