@@ -24,13 +24,14 @@ function editTextNote(event) {
 }
 
 function saveTextChanges(event) {
-    const option = document.createElement('option');
-    const commit = new Date();
+    const option = document.createElement('option'),
+          title = JSON.stringify(new Date()),
+          textData = JSON.stringify(text.textContent);
 
-    localStorage.setItem(commit, text.textContent);
-    option.textContent = commit;
-    textChangeHistory.prepend(option);
+    localStorage.setItem(title, textData);
     
+    option.textContent = title;
+    textChangeHistory.prepend(option);
 
     text.contentEditable = false;
     edit.disabled = false;
@@ -47,8 +48,8 @@ function cancelTextChanges(event) {
 }
 
 function getStorageHistory(event) {
-    let key;
-    let option = document.createElement('option');
+    let key,
+        option = document.createElement('option');
     
     if (localStorage.length > 0) {
         for(let i = 0; i < localStorage.length; i++) {
