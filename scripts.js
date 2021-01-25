@@ -5,7 +5,8 @@ let text = document.querySelector('#textNote'),
     storageArray = [],
     edit = document.querySelector('.editBtn'),
     save = document.querySelector('.saveBtn'),
-    cancel = document.querySelector('.cancelBtn');
+    cancel = document.querySelector('.cancelBtn'),
+    option = document.createElement('option');
 
 // Обработчики событий
 document.addEventListener('DOMContentLoaded', getStorageHistory);
@@ -24,8 +25,7 @@ function editTextNote(event) {
 }
 
 function saveTextChanges(event) {
-    const option = document.createElement('option'),
-          title = JSON.stringify(new Date()),
+    const title = JSON.stringify(new Date()),
           textData = JSON.stringify(text.textContent);
 
     localStorage.setItem(title, textData);
@@ -48,13 +48,9 @@ function cancelTextChanges(event) {
 }
 
 function getStorageHistory(event) {
-    let key,
-        option = document.createElement('option');
-    
     if (localStorage.length > 0) {
         for(let i = 0; i < localStorage.length; i++) {
-            key = localStorage.key(i);
-            option.textContent = key;
+            option.textContent = localStorage.key(i);
             textChangeHistory.prepend(option);
         }
     }
