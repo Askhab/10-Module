@@ -28,11 +28,13 @@ function saveTextChanges(event) {
     event.preventDefault();
 
     const title = localStorage.length + 1,
-          textData = JSON.stringify(text.textContent);
+          textData = JSON.stringify(text.textContent),
+          object = {
+            title: title,
+            textData: textData,
+          };
 
-    localStorage.setItem(title, textData);
-    option.textContent = JSON.parse(title);
-    textChangeHistory.prepend(option);
+    storageArray.push(object);
 
     text.contentEditable = false;
     edit.disabled = false;
@@ -51,9 +53,7 @@ function cancelTextChanges(event) {
     text.textContent = storageArray.pop();
 }
 
-function getStorageHistory(event) {
-    event.preventDefault();
-
+function getStorageHistory() {
     
 }
 
