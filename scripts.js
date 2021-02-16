@@ -4,7 +4,7 @@ let text = document.querySelector('#textNote'),
     textChangeHistory = document.querySelector('#textNoteHistory'),
     changeHistoryArray = [],
     historyArrayObject = {},
-    date = new Date(),
+    
     option = document.createElement('option'),
     edit = document.querySelector('.editBtn'),
     save = document.querySelector('.saveBtn'),
@@ -34,7 +34,9 @@ function editTextNote(event) {
 //  а режим редактирования отключается (кнопки возвращаются в исходное состояние);
 function saveTextChanges(event) {
     event.preventDefault();
-    let commit = function() {
+    
+    let date = new Date(),
+        commit = function() {
         let hour = smallNum(date.getHours());
         let minute = smallNum(date.getMinutes());
         let second = smallNum(date.getSeconds());
@@ -53,6 +55,7 @@ function saveTextChanges(event) {
     };
 
     changeHistoryArray.push(historyArrayObject);
+    
     let key = JSON.stringify(historyArrayObject.id);
     let value = JSON.stringify(historyArrayObject.text);
     localStorage.setItem(key, value);
