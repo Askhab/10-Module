@@ -3,8 +3,7 @@
 let text = document.querySelector('#textNote'),
     textChangeHistory = document.querySelector('#textNoteHistory'),
     changeHistoryArray = [],
-    historyArrayObject = {},
-    
+    localStorageArray = [],
     option = document.createElement('option'),
     edit = document.querySelector('.editBtn'),
     save = document.querySelector('.saveBtn'),
@@ -34,32 +33,37 @@ function editTextNote(event) {
 //  а режим редактирования отключается (кнопки возвращаются в исходное состояние);
 function saveTextChanges(event) {
     event.preventDefault();
-    
-    let date = new Date(),
-        commit = function() {
-        let hour = smallNum(date.getHours());
-        let minute = smallNum(date.getMinutes());
-        let second = smallNum(date.getSeconds());
-        let time = `${hour}:${minute}:${second}`;
 
-        function smallNum(num) {
-            return (num < 10 ? "0" : "") + num;
-        }
+    // 
+    // let date = new Date(),
+    //     commit = function() {
+    //     let hour = smallNum(date.getHours());
+    //     let minute = smallNum(date.getMinutes());
+    //     let second = smallNum(date.getSeconds());
+    //     let time = `${hour}:${minute}:${second}`;
+
+    //     function smallNum(num) {
+    //         return (num < 10 ? "0" : "") + num;
+    //     }
         
-        return time;
+    //     return time;
+    // };
+
+    // object = {
+    //     id: commit(),
+    //     text: text.textContent,
+    // };
+
+    let object = {
+        id: localStorage.length + 1,
+        text: text.textContent.trim(),
     };
 
-    historyArrayObject = {
-        id: commit(),
-        text: text.textContent,
-    };
-
-    changeHistoryArray.push(historyArrayObject);
+    changeHistoryArray.push(object);
     
-    let key = JSON.stringify(historyArrayObject.id);
-    let value = JSON.stringify(historyArrayObject.text);
+    let key = JSON.stringify(object.id);
+    let value = JSON.stringify(object.text);
     localStorage.setItem(key, value);
-    console.log(changeHistoryArray);
     
     text.contenteditable = false;
     edit.disabled = false;
@@ -71,25 +75,39 @@ function saveTextChanges(event) {
 // последний сохраненный вариант изLocalStorage, режим редактирования отключается;
 function cancelTextChanges(event) {
     event.preventDefault();
-    getArrayFromLS();
-    let lastEdit = changeHistoryArray.pop();
-    text.textContent = lastEdit.text;
+    
+    if(localStorage.length > 0) {
+        getArrayFromLS();
+        let lastEdit = localStorageArray.pop();
+        text.textContent = lastEdit.text;
 
-    edit.disabled = true;
+        console.log(localStorageArray);
+    } else {
+        localStorageArray = null;
+    }
+
+    edit.disabled = false;
+    save.disabled = true;
+    cancel.disabled = true;
 }
 
 function getArrayFromLS() {
-    for(let i = 0; i < localStorage.length; i++) {
-        let title = JSON.parse(localStorage.key(i)),
-            content = JSON.parse(localStorage.getItem(title)),
-            obj = {
-                title: title,
-                text: content,
-            };
+    // for(let i = 1; i <= localStorage.length; i++) {
+    //     let id = localStorage.key(i),
+    //         text = localStorage.getItem(i),
+    //         obj = {
+    //             id: id,
+    //             text: text,
+    //         };
 
-        changeHistoryArray.push(obj);
-    }
+    //     localStorageArray.push(obj);
+    // }
+   
+    return localStorageArray;
 }
+
+getArrayFromLS();
+console.log(localStorageArray);
 
 // 5 - При следующих перезагрузках страницы содержимое блока с текстом 
 // автоматически подтягивается из LocalStorage (последний сохраненный вариант).
