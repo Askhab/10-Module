@@ -92,16 +92,16 @@ function cancelTextChanges(event) {
 }
 
 function getArrayFromLS() {
-    // for(let i = 1; i <= localStorage.length; i++) {
-    //     let id = localStorage.key(i),
-    //         text = localStorage.getItem(i),
-    //         obj = {
-    //             id: id,
-    //             text: text,
-    //         };
+    for(let i = 1; i <= localStorage.length; ++i) {
+        let id = localStorage.key(i),
+            text = localStorage.getItem(i),
+            obj = {
+                id: id,
+                text: text,
+            };
 
-    //     localStorageArray.push(obj);
-    // }
+        localStorageArray.push(obj);
+    }
    
     return localStorageArray;
 }
