@@ -59,6 +59,10 @@ button:disabled {
     border-color: #dadada;
 }
 
+option {
+    padding: 3px;
+}
+
 /* .editBtn {
 
 }

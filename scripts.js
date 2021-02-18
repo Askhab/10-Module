@@ -1,25 +1,27 @@
-'use strict';
+"use strict";
 // 1 - при первой загрузке страницы в блоке с текстом отображается текст по умолчанию (любой);
-let text = document.querySelector('#textNote'),
-    textChangeHistory = document.querySelector('#textNoteHistory'),
+// Объявление переменных
+let text = document.querySelector("#textNote"),
+    textChangeHistory = document.querySelector("#textNoteHistory"),
     changeHistoryArray = [],
     localStorageArray = [],
-    option = document.createElement('option'),
-    edit = document.querySelector('.editBtn'),
-    save = document.querySelector('.saveBtn'),
-    cancel = document.querySelector('.cancelBtn');
+    option = document.createElement("option"),
+    edit = document.querySelector(".editBtn"),
+    save = document.querySelector(".saveBtn"),
+    cancel = document.querySelector(".cancelBtn");
 
 // Обработчики событий
-// window.addEventListener('DOMContentLoaded', );
-edit.addEventListener('click', editTextNote);
-save.addEventListener('click', saveTextChanges);
-cancel.addEventListener('click', cancelTextChanges);
+window.addEventListener("DOMContentLoaded", getTextHistoryList);
+edit.addEventListener("click", editTextNote);
+save.addEventListener("click", saveTextChanges);
+cancel.addEventListener("click", cancelTextChanges);
 
 // Функции
 
 // 2 - при нажатии на кнопку «Редактировать» блок с текстом становится редактируемым 
 // (contenteditable=true), кнопки «Сохранить» и «Отмена» становятся активными,
 //  а сама кнопка «Редактировать» — неактивной;
+// Функция для кнопки - Редактировать
 function editTextNote(event) {
     event.preventDefault();
 
@@ -31,36 +33,33 @@ function editTextNote(event) {
 
 // 3 - при нажатии на кнопку «Сохранить» содержимое блока с текстом сохраняется в LocalStorage,
 //  а режим редактирования отключается (кнопки возвращаются в исходное состояние);
+// Функция для кнопки - Сохранить
 function saveTextChanges(event) {
     event.preventDefault();
 
-    // 
-    // let date = new Date(),
-    //     commit = function() {
-    //     let hour = smallNum(date.getHours());
-    //     let minute = smallNum(date.getMinutes());
-    //     let second = smallNum(date.getSeconds());
-    //     let time = `${hour}:${minute}:${second}`;
+    // Переменные для определения времени внесения изменений при сохранении текста
+    let date = new Date(),
+        commit = function() {
+            let hour = smallNum(date.getHours());
+            let minute = smallNum(date.getMinutes());
+            let second = smallNum(date.getSeconds());
+            let time = `${hour}:${minute}:${second}`;
 
-    //     function smallNum(num) {
-    //         return (num < 10 ? "0" : "") + num;
-    //     }
+            function smallNum(num) {
+                return (num < 10 ? "0" : "") + num;
+        }
         
-    //     return time;
-    // };
+            return time;
+        };
 
-    // object = {
-    //     id: commit(),
-    //     text: text.textContent,
-    // };
-
+    // Объект передаваемый в массив
     let object = {
-        id: localStorage.length + 1,
+        id: commit(),
         text: text.textContent.trim(),
     };
-
     changeHistoryArray.push(object);
-    
+
+    // Переменные значения которых приведены к форматы JSON и переданы в LS
     let key = JSON.stringify(object.id);
     let value = JSON.stringify(object.text);
     localStorage.setItem(key, value);
@@ -73,41 +72,57 @@ function saveTextChanges(event) {
 
 // 4 - при нажатии на кнопку «Отмена» содержимое блока с текстом заменяется на 
 // последний сохраненный вариант изLocalStorage, режим редактирования отключается;
+// Функция для кнопки - Отмена
 function cancelTextChanges(event) {
     event.preventDefault();
-    
-    if(localStorage.length > 0) {
-        getArrayFromLS();
-        let lastEdit = localStorageArray.pop();
-        text.textContent = lastEdit.text;
 
-        console.log(localStorageArray);
+    // Сработает только при наличии объектов в массиве полученном из LS
+    if(localStorageArray.length > 0) {
+        let lastEdit = localStorageArray.slice(-1);
+        text.textContent = lastEdit[0].text;
     } else {
-        localStorageArray = null;
+        getArrayFromLS();
+        cancelTextChanges();
     }
 
     edit.disabled = false;
     save.disabled = true;
     cancel.disabled = true;
 }
+// Функция для получения данных в список изменений при первой загрузке/перезагрузке страницы
+function getTextHistoryList() {
 
+    // Сработает только при наличии объектов в LS
+    if(localStorage.length > 0) {
+        getArrayFromLS();
+        for (let item of localStorageArray) {
+            option.textContent = item.id;
+            textChangeHistory.prepend(option);
+        }
+        let lastEdit = localStorageArray.slice(-1);
+        text.textContent = lastEdit[0].text;
+    }
+}
+// Функция для получения объектов из LS и преобразования их в элементы массива
 function getArrayFromLS() {
-    for(let i = 1; i <= localStorage.length; ++i) {
+    // Обнуляем массив
+    localStorageArray = [];
+    
+    // Получем данные из LS и внедряем в массив
+    for(let i = 0; i < localStorage.length; i++) {
         let id = localStorage.key(i),
-            text = localStorage.getItem(i),
+            text = localStorage.getItem(id),
+            obj = {};
+        if(id !== null && text !== null) {
             obj = {
-                id: id,
-                text: text,
+                id: id.replace(/"/g, ""), // методом replace() удаляем кавычки
+                text: text.replace(/"/g, "") // методом replace() удаляем кавычки
             };
-
+        }
         localStorageArray.push(obj);
     }
-   
-    return localStorageArray;
 }
 
-getArrayFromLS();
-console.log(localStorageArray);
 
 // 5 - При следующих перезагрузках страницы содержимое блока с текстом 
 // автоматически подтягивается из LocalStorage (последний сохраненный вариант).
