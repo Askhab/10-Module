@@ -74,16 +74,11 @@ function saveTextChanges(event) {
 /* 4 - при нажатии на кнопку «Отмена» содержимое блока с текстом заменяется на последний сохраненный вариант изLocalStorage, режим редактирования отключается; */
 
 // Функция для кнопки - Отмена
-function cancelTextChanges(event) {
-    event.preventDefault();
-
+function cancelTextChanges() {
     // Сработает только при наличии объектов в массиве полученном из LS
     if(localStorageArray.length > 0) {
         let lastEdit = localStorageArray.slice(-1);
         text.textContent = lastEdit[0].text;
-    } else {
-        getArrayFromLS();
-        cancelTextChanges();
     }
 
     text.contentEditable = false;
@@ -114,6 +109,8 @@ function getSavedText(event) {
     for (let item of localStorageArray) {
         if(key === item.id) {
             text.textContent = item.text;
+        } else if(key === origin) {
+            text.textContent = item.content;
         }
     }
 }
@@ -122,19 +119,28 @@ function getSavedText(event) {
 function getArrayFromLS() {
     // Обнуляем массив
     localStorageArray = [];
-
-    // Получем данные из LS и внедряем в массив
-    for(let i = 0; i < localStorage.length; i++) {
-        let id = localStorage.key(i),
-            text = localStorage.getItem(id),
-            obj = {};
-        if(id !== null && text !== null) {
-            obj = {
-                id: id.replace(/"/g, ""), // методом replace() удаляем кавычки
-                text: text.replace(/"/g, "") 
-            };
+    // Создаем объект и вносим текст из редактора в него если LS пуст
+    if(localStorage.length === 0) {
+        let original = {
+            title: origin,
+            content: text.textContent
+        };
+    
+        localStorageArray.push(original);
+    } else {
+        // Получем данные из LS и внедряем в массив
+        for(let i = 0; i < localStorage.length; i++) {
+            let id = localStorage.key(i),
+                value = localStorage.getItem(id),
+                obj = {};
+            if(id !== null && text !== null) {
+                obj = {
+                    id: id.replace(/"/g, ""), // методом replace() удаляем кавычки
+                    text: value.replace(/"/g, "") 
+                };
+            }
+            localStorageArray.push(obj);
         }
-        localStorageArray.push(obj);
     }
 }
 
