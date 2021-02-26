@@ -90,7 +90,7 @@ function cancelTextChanges() {
 // Функция для получения данных в список изменений при первой загрузке/перезагрузке страницы
 function getTextHistoryList() {
     localStorageArray = [];
-    if(localStorage.length === 0) {
+    if(!localStorage.getItem("storyArray")) {
         let obj = {
             title: "Original text",
             text: textArea.textContent
