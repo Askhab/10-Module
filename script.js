@@ -7,7 +7,8 @@ let textArea = document.querySelector("#textNote"),
     edit = document.querySelector(".editBtn"),
     save = document.querySelector(".saveBtn"),
     cancel = document.querySelector(".cancelBtn"),
-    option = document.createElement("option");
+    option = document.createElement("option"),
+    localStorageArray = [];
 
 // Обработчики событий
 window.addEventListener("DOMContentLoaded", getTextHistoryList);
@@ -72,7 +73,8 @@ function saveTextChanges(event) {
     cancel.disabled = true;
 }
 
-/* 4 - при нажатии на кнопку «Отмена» содержимое блока с текстом заменяется на последний сохраненный вариант изLocalStorage, режим редактирования отключается; */
+/* 4 - при нажатии на кнопку «Отмена» содержимое блока с текстом заменяется на
+ последний сохраненный вариант изLocalStorage, режим редактирования отключается; */
 
 // Функция для кнопки - Отмена
 function cancelTextChanges() {
@@ -87,25 +89,26 @@ function cancelTextChanges() {
 
 // Функция для получения данных в список изменений при первой загрузке/перезагрузке страницы
 function getTextHistoryList() {
-    let localStorageArray = [];
-    let obj = {
-        title: "Original text",
-        text: textArea.textContent
-    };
-    option.textContent = obj.title;
-    textChangeHistory.prepend(option);
-    localStorageArray.push(obj);
-    localStorage.setItem("storyArray", JSON.stringify(localStorageArray));
-
-    localStorageArray = JSON.parse(localStorage.getItem("storyArray"));
-    for (let item of localStorageArray) {
-        option.textContent = item.title;
+    localStorageArray = [];
+    if(localStorage.length === 0) {
+        let obj = {
+            title: "Original text",
+            text: textArea.textContent
+        };
+        option.textContent = obj.title;
         textChangeHistory.prepend(option);
+        localStorageArray.push(obj);
+        localStorage.setItem("storyArray", JSON.stringify(localStorageArray));
+    } else {
+        localStorageArray = JSON.parse(localStorage.getItem("storyArray"));
+        for (let item of localStorageArray) {
+            let listItem = document.createElement("option");
+            listItem.textContent = item.title;
+            textChangeHistory.prepend(listItem);
+        }
+        let lastEdit = localStorageArray.slice(-1);
+        textArea.textContent = lastEdit[0].text;
     }
-    let lastEdit = localStorageArray.slice(-1);
-    textArea.textContent = lastEdit[0].text;
-
-    console.log(localStorageArray);
 }
 
 // Функция для получения сохраненных состояний текста из LS
@@ -119,3 +122,6 @@ function getSavedText(event) {
         }
     }
 }
+
+/* 5 - При следующих перезагрузках страницы содержимое блока с текстом 
+автоматически подтягивается из LocalStorage (последний сохраненный вариант). */

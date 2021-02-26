@@ -86,62 +86,62 @@
 //     save.disabled = true;
 //     cancel.disabled = true;
 // }
-// Функция для получения данных в список изменений при первой загрузке/перезагрузке страницы
-function getTextHistoryList() {
-    // Сработает только при наличии объектов в LS
-    if(localStorage.length > 0) {
-        getArrayFromLS();
-        for (let item of localStorageArray) {
-            option.textContent = item.id;
-            textChangeHistory.prepend(option);
-        }
-        let lastEdit = localStorageArray.slice(-1);
-        text.textContent = lastEdit[0].text;
-    }
-}
+// // Функция для получения данных в список изменений при первой загрузке/перезагрузке страницы
+// function getTextHistoryList() {
+//     // Сработает только при наличии объектов в LS
+//     if(localStorage.length > 0) {
+//         getArrayFromLS();
+//         for (let item of localStorageArray) {
+//             option.textContent = item.id;
+//             textChangeHistory.prepend(option);
+//         }
+//         let lastEdit = localStorageArray.slice(-1);
+//         text.textContent = lastEdit[0].text;
+//     }
+// }
 
-// Функция для получения сохраненных состояний текста из LS
-function getSavedText(event) {
-    let time = event.target.closest("option");
-    let key = time.textContent;
+// // Функция для получения сохраненных состояний текста из LS
+// function getSavedText(event) {
+//     let time = event.target.closest("option");
+//     let key = time.textContent;
 
-    getArrayFromLS();
-    for (let item of localStorageArray) {
-        if(key === item.id) {
-            text.textContent = item.text;
-        } else if(key === origin) {
-            text.textContent = item.content;
-        }
-    }
-}
+//     getArrayFromLS();
+//     for (let item of localStorageArray) {
+//         if(key === item.id) {
+//             text.textContent = item.text;
+//         } else if(key === origin) {
+//             text.textContent = item.content;
+//         }
+//     }
+// }
 
-// Функция для получения объектов из LS и преобразования их в элементы массива
-function getArrayFromLS() {
-    // Обнуляем массив
-    localStorageArray = [];
-    // Создаем объект и вносим текст из редактора в него если LS пуст
-    if(localStorage.length === 0) {
-        let original = {
-            title: origin,
-            content: text.textContent
-        };
+// // Функция для получения объектов из LS и преобразования их в элементы массива
+// function getArrayFromLS() {
+//     // Обнуляем массив
+//     localStorageArray = [];
+//     // Создаем объект и вносим текст из редактора в него если LS пуст
+//     if(localStorage.length === 0) {
+//         let original = {
+//             title: origin,
+//             content: text.textContent
+//         };
     
-        localStorageArray.push(original);
-    } else {
-        // Получем данные из LS и внедряем в массив
-        for(let i = 0; i < localStorage.length; i++) {
-            let id = localStorage.key(i),
-                value = localStorage.getItem(id),
-                obj = {};
-            if(id !== null && text !== null) {
-                obj = {
-                    id: id.replace(/"/g, ""), // методом replace() удаляем кавычки
-                    text: value.replace(/"/g, "") 
-                };
-            }
-            localStorageArray.push(obj);
-        }
-    }
-}
+//         localStorageArray.push(original);
+//     } else {
+//         // Получем данные из LS и внедряем в массив
+//         for(let i = 0; i < localStorage.length; i++) {
+//             let id = localStorage.key(i),
+//                 value = localStorage.getItem(id),
+//                 obj = {};
+//             if(id !== null && text !== null) {
+//                 obj = {
+//                     id: id.replace(/"/g, ""), // методом replace() удаляем кавычки
+//                     text: value.replace(/"/g, "") 
+//                 };
+//             }
+//             localStorageArray.push(obj);
+//         }
+//     }
+// }
 
-/* 5 - При следующих перезагрузках страницы содержимое блока с текстом автоматически подтягивается из LocalStorage (последний сохраненный вариант). */
+// /* 5 - При следующих перезагрузках страницы содержимое блока с текстом автоматически подтягивается из LocalStorage (последний сохраненный вариант). */
